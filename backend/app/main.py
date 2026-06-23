@@ -37,8 +37,8 @@ app.add_middleware(
 
 # Include routers
 # app.include_router(health.router)
-app.include_router(upload.router)
-app.include_router(chat.router)
+app.include_router(upload.router, prefix="/api")
+app.include_router(chat.router, prefix="/api")
 
 
 @app.get("/")

@@ -25,7 +25,12 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
       >
         <p className="text-sm">{message.text}</p>
         <p className="text-xs mt-1 opacity-70">
-          {message.timestamp.toLocaleTimeString()}
+          {message.timestamp.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            second: 'numeric',
+            hour12: true,
+          })}
         </p>
       </div>
     </div>

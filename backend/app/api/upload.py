@@ -4,8 +4,44 @@ from ..services.pdf_service import PDFService
 from ..services.chunking_service import ChunkingService
 from ..services.indexing_service import IndexingService
 from ..utils.logger import logger
+from ..core.config import settings
+from pypdf import PdfReader
+import os
+from typing import List
 
 router = APIRouter(prefix="/upload", tags=["upload"])
+
+@router.get("")
+async def list_pdfs():
+    """List all uploaded PDFs."""
+    try:
+        if not os.path.exists(settings.PDF_UPLOAD_DIR):
+            return []
+        
+        pdf_files = []
+        for f in os.listdir(settings.PDF_UPLOAD_DIR):
+            if not f.endswith('.pdf'):
+                continue
+
+            file_path = os.path.join(settings.PDF_UPLOAD_DIR, f)
+            pages = 0
+            try:
+                reader = PdfReader(file_path)
+                pages = len(reader.pages)
+            except Exception as exc:
+                logger.warning(f"Unable to read page count for {f}: {exc}")
+
+            pdf_files.append({
+                "filename": f,
+                "path": file_path,
+                "size": os.path.getsize(file_path),
+                "pages": pages,
+            })
+
+        return pdf_files
+    except Exception as e:
+        logger.error(f"Error listing PDFs: {str(e)}")
+        return []
 
 @router.post("", response_model=UploadResponse)
 async def upload_pdf(request: Request,file: UploadFile = File(...)):
