@@ -11,34 +11,47 @@ export default function ChatPage() {
   const [selectedPDF, setSelectedPDF] = useState<string | null>(null);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <main className="min-h-screen">
       <Navbar />
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-1">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">PDFs</h2>
+
+      <section className="container mx-auto px-6 py-12 lg:py-16">
+        <div className="grid gap-8 xl:grid-cols-[0.95fr_1.4fr]">
+          <aside className="rounded-[2rem] border border-slate-200/70 bg-white/95 p-6 shadow-xl shadow-slate-900/5">
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div>
+                <h2 className="text-2xl font-semibold text-slate-900">Document library</h2>
+                <p className="mt-1 text-sm text-slate-500">
+                  Select a PDF to start contextual chat.
+                </p>
+              </div>
+              <span className="inline-flex rounded-full bg-blue-100 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-700">
+                {pdfs.length} docs
+              </span>
+            </div>
+
             <div className="space-y-3">
-              {loading && <p className="text-gray-600">Loading PDFs...</p>}
+              {loading && <p className="text-slate-600">Loading PDFs...</p>}
               {error && <p className="text-red-600 text-sm">{error}</p>}
-              {pdfs.length === 0 && !loading && (
-                <p className="text-gray-500 text-sm">No PDFs uploaded yet</p>
+              {!loading && pdfs.length === 0 && (
+                <p className="text-slate-500 text-sm">No PDFs uploaded yet. Add one from the Upload page.</p>
               )}
               {pdfs.map((pdf) => (
-                <PdfCard 
-                  key={pdf.filename} 
-                  filename={pdf.filename} 
+                <PdfCard
+                  key={pdf.filename}
+                  filename={pdf.filename}
                   pages={pdf.pages}
                   onSelect={setSelectedPDF}
                   isSelected={selectedPDF === pdf.filename}
                 />
               ))}
             </div>
-          </div>
-          <div className="lg:col-span-3">
+          </aside>
+
+          <div>
             <ChatWindow selectedPDF={selectedPDF} />
           </div>
         </div>
-      </div>
+      </section>
     </main>
   );
 }
