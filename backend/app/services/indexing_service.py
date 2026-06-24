@@ -20,7 +20,12 @@ class IndexingService:
                 embedding = (self.embedding_service.generate_embedding(chunk))
 
                 self.collection.add(ids=[f"{source}_chunk_{index}"],
-                    documents=[chunk],embeddings=[embedding])
+                    documents=[chunk],embeddings=[embedding],
+                     metadatas=[{
+                        "filename": source,
+                        "chunk_index": index
+                    }]
+                    )
 
             logger.info(
                 f"Successfully indexed {len(chunks)} chunks"

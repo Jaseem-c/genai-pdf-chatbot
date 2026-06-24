@@ -1,7 +1,7 @@
 def build_rag_prompt(context: str, question: str) -> str:
 
     return f"""
-You are a helpful AI assistant for document question answering.
+You are a document assistant.
 
 Instructions:
 - Answer only from the provided context.
