@@ -68,7 +68,8 @@ async def upload_pdf(request: Request,file: UploadFile = File(...)):
     )
 
     indexed_count = indexing_service.index_chunks(
-        chunks
+        chunks,
+        source=result["filename"]
     )
     
 

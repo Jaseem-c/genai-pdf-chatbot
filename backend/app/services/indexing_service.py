@@ -10,7 +10,7 @@ class IndexingService:
         self.collection = collection
         self.embedding_service = EmbeddingService()
 
-    def index_chunks(self,chunks: List[str]) -> int:
+    def index_chunks(self,chunks: List[str], source: str) -> int:
         """Generate embeddings and store chunks in ChromaDB."""
 
         try:
@@ -19,7 +19,7 @@ class IndexingService:
 
                 embedding = (self.embedding_service.generate_embedding(chunk))
 
-                self.collection.add(ids=[f"chunk_{index}"],
+                self.collection.add(ids=[f"{source}_chunk_{index}"],
                     documents=[chunk],embeddings=[embedding])
 
             logger.info(
